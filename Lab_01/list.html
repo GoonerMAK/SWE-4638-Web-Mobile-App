@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>List</title>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            margin: 0;
+        }
+
+        header {
+            background-color: #333;
+            color: white;
+            padding: 30px;
+        }
+
+        nav ul {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: space-around;
+        }
+
+        nav .menu {
+            margin-left: -150px;
+        }
+
+        nav a {
+            text-decoration: none;
+            color: white;
+        }
+
+        main {
+            flex: 1;
+            padding: 20px;
+        }
+
+        footer {
+            background-color: #333;
+            color: white;
+            text-align: center;
+            padding: 10px;
+        }
+
+        /* Flexbox for responsive layout */
+        /* .flex-container {
+            display: flex;
+            flex-wrap: wrap;
+        } */
+
+        .flex-item-left, .flex-item-right {
+            flex: 1;
+        }
+
+        /* Responsive layout - makes a one column layout instead of a two-column layout */
+        @media (max-width: 800px) {
+            .flex-item-right, .flex-item-left {
+                flex: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav>
+            <ul>
+                <li style="font-size: 20px;" class="menu"><strong>MENU</strong></li>
+                <li><a href="home.html">Home</a></li>
+                <li><a href="list.html">List</a></li>
+                <li><a href="table.html">Table</a></li>
+                <li><a href="form.html">Form</a></li>
+            </ul>
+        </nav>
+    </header>
+    <main class="flex-container">
+        <div class="flex-item-left">
+            <h1>List</h1>
+            <h3>Player of the tournament list goes here:</h3>
+            <ol>
+                <li>2022</li>
+                    <ul style="list-style-type: square;">
+                        <li>Lionel Messi</li>
+                    </ul>
+                <li>2018</li>
+                    <ul style="list-style-type: disc;">
+                        <li>Luka Modric</li>
+                    </ul>
+                <li>2014</li>
+                    <ul style="list-style-type: circle;">
+                        <li>Lionel Messi</li>
+                    </ul>
+                <li>2010</li>
+                    <ul style="list-style-type: none;">
+                        <li>Diego Forlan</li>
+                    </ul>
+            </ol>
+        </div>
+
+        <p style="margin: 50px;"></p>
+
+        <div class="flex-item-left">
+            <h3>Leading Goalscorer List:</h3>
+            <ol>
+                <li>16</li>
+                    <ul style="list-style-type: square;">
+                        <li>Miroslav Klose</li>
+                    </ul>
+                <li>15</li>
+                    <ul style="list-style-type: square;">
+                        <li>Ronaldo Nazario</li>
+                    </ul>
+                <li>14</li>
+                    <ul style="list-style-type: square;">
+                        <li>Gerd Muller</li>
+                    </ul>
+                <li>13</li>
+                    <ul style="list-style-type: square;">
+                        <li>Just Fontaine</li>
+                    </ul>
+                <li>12</li>
+                    <ul style="list-style-type: square;">
+                        <li>Pele</li>
+                    </ul>
+                <li>11</li>
+                    <ol type="a">
+                        <li>Arsene Wenger</li>
+                        <li>Jurgen Klinsmann</li>
+                    </ol>
+            </ol>
+        </div>
+
+
+    </main>
+    <footer>
+        <p>Copyright @ MAK</p>
+    </footer>
+</body>
+</html>

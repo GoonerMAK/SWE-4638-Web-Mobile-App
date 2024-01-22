@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Table</title>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            margin: 0;
+        }
+
+        header {
+            background-color: #333;
+            color: white;
+            padding: 30px;
+        }
+
+        nav ul {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: space-around;
+        }
+
+        nav .menu {
+            margin-left: -150px;
+        }
+
+        nav a {
+            text-decoration: none;
+            color: white;
+        }
+
+        main {
+            flex: 1;
+            padding: 20px;
+        }
+
+        footer {
+            background-color: #333;
+            color: white;
+            text-align: center;
+            padding: 10px;
+        }
+
+        /* Flexbox for responsive layout */
+        .flex-container {
+            display: flex;
+            flex-wrap: wrap;
+        }
+
+        .flex-item-left, .flex-item-right {
+            flex: 1;
+        }
+
+        .flex-item-left p {
+            padding-left: 15%; 
+            font-weight: bold;
+            font-size: 4rem;
+        }
+
+        table {
+            border-collapse: collapse;
+        }
+
+        th, td {
+            padding: 5px; 
+            border: 1px solid black; 
+        }
+
+        /* Responsive layout - makes a one column layout instead of a two-column layout */
+        @media (max-width: 800px) {
+            .flex-item-right, .flex-item-left {
+                flex: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav>
+            <ul>
+                <li style="font-size: 20px;" class="menu"><strong>MENU</strong></li>
+                <li><a href="home.html">Home</a></li>
+                <li><a href="list.html">List</a></li>
+                <li><a href="table.html">Table</a></li>
+                <li><a href="form.html">Form</a></li>
+            </ul>
+        </nav>
+    </header>
+    <main class="flex-container">
+        <div class="flex-item-left">
+            <h1>Table</h1>
+            <table border="1">
+                <tr>
+                  <th rowspan="2" colspan="2" style="font-family: bold; font-size: 1.2rem;">Play Type</th>
+                  <th rowspan="1" colspan="3">Groups</th>  
+                </tr>
+                <tr>
+                    <th rowspan="1" colspan="1">Group A</th>  
+                    <th rowspan="1" colspan="2">Group B</th>  
+                </tr>
+                <tr>
+                    <td rowspan="2" colspan="2">Football</dh>  
+                    <td rowspan="1" colspan="1">GER</td>
+                    <td rowspan="1" colspan="2">BR</td>
+                </tr>
+                <tr>
+                    <td rowspan="1" colspan="1">FR</td>
+                    <td rowspan="1" colspan="2">ARG</td>
+                </tr>
+                <tr>
+                    <td rowspan="4" colspan="1">Cricket</dh>  
+                    <td rowspan="2" colspan="1">T-20</td>
+                    <td rowspan="1" colspan="1">AUS</td>
+                    <td rowspan="1" colspan="2">NZ</td>                
+                </tr>
+                <tr>
+                    <td rowspan="1" colspan="1">ENG</td>
+                    <td rowspan="1" colspan="2">SA</td>                
+                </tr>
+                <tr>
+                    <td rowspan="2" colspan="1">ODI</td>
+                    <td rowspan="1" colspan="1">BD</td>
+                    <td rowspan="1" colspan="2">IND</td>                
+                </tr>
+                <tr>
+                    <td rowspan="1" colspan="1">ENG</td>
+                    <td rowspan="1" colspan="2">PAK</td>                
+                </tr>
+              </table>
+        </div>
+        <!-- <div class="flex-item-right">
+             Add content for the right side if needed 
+        </div> -->
+    </main>
+    <footer>
+        <p>Copyright @ MAK</p>
+    </footer>
+</body>
+</html>

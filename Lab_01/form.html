@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Form</title>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            margin: 0;
+        }
+
+        header {
+            background-color: #333;
+            color: white;
+            padding: 30px;
+        }
+
+        nav ul {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: space-around;
+        }
+
+        nav .menu {
+            margin-left: -150px;
+        }
+
+        nav a {
+            text-decoration: none;
+            color: white;
+        }
+
+        main {
+            flex: 1;
+            padding: 20px;
+        }
+
+        footer {
+            background-color: #333;
+            color: white;
+            text-align: center;
+            padding: 10px;
+        }
+
+        /* Flexbox for responsive layout */
+        .flex-container {
+            display: flex;
+            flex-wrap: wrap;
+        }
+
+        .flex-item-left, .flex-item-right {
+            flex: 1;
+        }
+
+        /* Responsive layout - makes a one column layout instead of a two-column layout */
+        @media (max-width: 800px) {
+            .flex-item-right, .flex-item-left {
+                flex: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav>
+            <ul>
+                <li style="font-size: 20px;" class="menu"><strong>MENU</strong></li>
+                <li><a href="home.html">Home</a></li>
+                <li><a href="list.html">List</a></li>
+                <li><a href="table.html">Table</a></li>
+                <li><a href="form.html">Form</a></li>
+            </ul>
+        </nav>
+    </header>
+    <main class="flex-container">
+        <div class="flex-item-left">
+            <h1>Form</h1>
+
+            <label for="ID">ID:</label> 
+            <input type="number" id="ID" name="ID" placeholder="ID"><br><br>
+            <label for="email">Email:</label>
+            <input type="text" id="email" name="email" placeholder="Email"><br><br>
+            <label for="gender">Gender:</label>
+            <input type="radio" id="male" name="male" value="male">
+            <label for="male">Male</label>   
+            <input type="radio" id="female" name="female" value="female">
+            <label for="female">Female</label><br><br>
+
+            <label for="program">Program:</label>
+
+            <select name="program" id="program">
+                <option></option>
+                <option value="SWE">SWE</option>
+                <option value="CSE">CSE</option>
+            </select><br><br>
+
+            <label for="review">Review:</label>   
+            <textarea id="review" name="review" rows="2" cols="50">
+            </textarea><br><br>
+
+            <div style="padding-left: 60px"><button>Submit</button> <button>Back</button></div>
+
+        </div>
+        <!-- <div class="flex-item-right">
+             Add content for the right side if needed 
+        </div> -->
+    </main>
+    <footer>
+        <p>Copyright @ MAK</p>
+    </footer>
+</body>
+</html>
