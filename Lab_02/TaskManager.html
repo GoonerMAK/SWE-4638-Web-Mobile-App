@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+  <head>
+    <title>Web development Lab</title>
+    <link rel="stylesheet" type="text/css" href="TaskManager.css" />
+  </head>
+  <body>
+    <h2>Task Manager</h2>
+
+    <div id="taskManager">
+
+    <div class="week-slider">
+      <div class="previous" onclick="previousWeek()">←</div>
+      <div class="current-week" id="currentWeekDisplay"></div>
+      <div class="next" onclick="nextWeek()">→</div>
+    </div>
+
+    <div id="taskManagerTable">
+      <table border="1">
+        <tr>
+          <th rowspan="1" colspan="2">Days</th>
+          <th rowspan="1" colspan="7">Tasks</th>
+        </tr>
+        <tr>
+            <td rowspan="1" colspan="2">Monday</td>  
+            <td rowspan="1" colspan="7">Tasks</td>
+        </tr>
+        <tr>
+          <td rowspan="1" colspan="2">Tuesday</td>  
+          <td rowspan="1" colspan="7">Tasks</td>
+        </tr>
+        <tr>
+          <td rowspan="1" colspan="2">Wednesday</td>  
+          <td rowspan="1" colspan="1">Tasks</td>
+        </tr>
+        <tr>
+          <td rowspan="1" colspan="2">Thursday</td>  
+          <td rowspan="1" colspan="1">Tasks</td>
+        </tr>
+        <tr>
+          <td rowspan="1" colspan="2">Friday</td>  
+          <td rowspan="1" colspan="1">Tasks</td>
+        </tr>
+        <tr>
+          <td rowspan="1" colspan="2">Saturday</td>  
+          <td rowspan="1" colspan="1">Tasks</td>
+        </tr>
+        <tr>
+          <td rowspan="1" colspan="2">Sunday</td>  
+          <td rowspan="1" colspan="1">Tasks</td>
+        </tr>
+      </table>
+    </div>
+   
+  </div>
+    <script type="text/javascript" src="TaskManager.js"></script>
+    
+    <script type="text/javascript">
+        function getRandomIntInclusive(min, max) {
+          const minCeiled = Math.ceil(min);
+          const maxFloored = Math.floor(max);
+          return Math.floor(Math.random() * (maxFloored - minCeiled + 1) + minCeiled); 
+        }
+
+        function generateTasks()
+        {
+          let tasks = [];
+          for(let i=-10; i<10; i++)
+          {
+            var currentDate = new Date();
+            currentDate.setDate(currentDate.getDate() + i);
+            for(let j=0; j<getRandomIntInclusive(1,5); j++)
+            {
+              const task = 
+              {
+                name: "Task" + Math.floor(Math.random() * 100) + 1,
+                dueDate: currentDate,
+                priority: getRandomIntInclusive(0,5)
+              }
+              tasks.push(task);
+            }
+          }
+          return tasks;
+        }
+
+        let tasksInfo = generateTasks();
+        console.log(tasksInfo)
+        let tm = new TaskManager(tasksInfo, "taskManager", function (task) {
+          console.log("Task Info:", task.name + "/" + task.dueDate + "/" + task.priority);
+        });
+
+
+      function formatDate(date) 
+      {
+        const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+        return date.toLocaleDateString('en-US', options);
+      }
+
+
+      function updateCurrentWeekDisplay() 
+      {
+        const currentWeekElement = document.getElementById("currentWeekDisplay");
+        const currentDate = tm.getCurrentDate();
+
+        const startOfWeek = new Date(currentDate);
+        startOfWeek.setDate(currentDate.getDate() - currentDate.getDay());
+
+        const endOfWeek = new Date(startOfWeek);
+        endOfWeek.setDate(endOfWeek.getDate() + 7);
+
+        if (currentDate.getDay() !== 0) {
+          startOfWeek.setDate(startOfWeek.getDate() + currentDate.getDay());
+        }
+
+        const options = { year: 'numeric', month: 'long', day: 'numeric' };
+        const startOfWeekString = startOfWeek.toLocaleDateString('en-US', options);
+        const endOfWeekString = endOfWeek.toLocaleDateString('en-US', options);
+
+        currentWeekElement.textContent = `Current Week: ${startOfWeekString} - ${endOfWeekString}`;
+      }
+
+
+  function previousWeek() {
+    let currentDate = tm.getCurrentDate();
+    currentDate.setDate(currentDate.getDate() - 7);
+    tm.render(currentDate);
+    updateCurrentWeekDisplay();
+  }
+
+  function nextWeek() {
+    let currentDate = tm.getCurrentDate();
+    currentDate.setDate(currentDate.getDate() + 7);
+    tm.render(currentDate);
+    updateCurrentWeekDisplay();
+  }
+
+  updateCurrentWeekDisplay();
+
+  tm.render(new Date());
+
+    </script>
+  </body>
+</html>
