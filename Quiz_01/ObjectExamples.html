@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>JavaScript Examples</title>
+</head>
+<body>
+  <button onclick="console.log(this.innerText)">from inside the element that recieved the <strong>onclick</strong> event</button>    <!--  from inside the element that recieved the event  -->
+  <script>
+    // Object 
+    const obj = {
+      name: 'MAK',
+      greet: function() {
+        console.log(`Hello, ${this.name}! - from method inside an object`);
+      },
+      theObject: function() {
+        return this;
+      }
+    };
+
+    obj.greet();  // Output: Hello, MAK! - from method inside an object
+    console.log(obj.theObject());     // Output: the Object
+
+    a = 1;
+    this.b = "b";
+    c = obj.name;
+    console.log(window.a)          // Output: 1 (this as a global object) 
+    console.log(window.b)          // Output: b (this as a global object)
+    console.log(c)                 // Output: MAK (this as a global object)
+    console.log(this === window);  // Output: true (this as a global object)
+ 
+
+    const globalName = 'MAK';
+    function greetings() {
+      console.log(`Hello, ${globalName}! - from inside a function`);
+    }
+    
+    greetings(); // Output: Hello, MAK! - from inside a function
+
+    'use strict';
+    function strictGreet() {
+      console.log(`Hello, ${this.nickname}!`);
+    }
+
+    strictGreet(); // Output: TypeError: Cannot read properties of undefined (reading 'nickname')
+
+    const person = {
+      nickname: 'SAM'
+    };
+
+    const anotherPerson = {
+      name: 'I am AJ, I am borrowing my name to another object using bind()'
+    };
+
+    strictGreet.call(person);     // Output: Hello, SAM!
+    greetings.call(person);       // Output: Hello, MAK! - from inside a function
+
+    let greet = obj.greet.bind(anotherPerson);
+    greet();                      // Output: Hello, I am AJ, I am borrowing my name to another object using bind()! - from method inside an object
+
+
+// 1. Define a function constructor
+function Person(name, age) {
+  this.name = name;
+  this.age = age;
+
+  // Define methods within the constructor function
+  this.greet = function() {
+    console.log(`Hello, my name is ${this.name} and I'm ${this.age} years old.`);
+  };
+}
+
+const person1 = new Person('Alice', 30);
+const person2 = new Person('Bob', 25);
+
+// Call the method
+person1.greet(); // Output: Hello, my name is Alice and I'm 30 years old.
+person2.greet(); // Output: Hello, my name is Bob and I'm 25 years old.
+
+
+
+// 2. Define a constructor function
+function Car(make, model, year) {
+  this.make = make;
+  this.model = model;
+  this.year = year;
+}
+
+// Add a method using prototype
+Car.prototype.displayInfo = function() {
+  console.log(`This is a ${this.year} ${this.make} ${this.model}.`);
+};
+
+const car1 = new Car('Toyota', 'Camry', 2020);
+const car2 = new Car('Honda', 'Accord', 2018);
+
+// Call the method
+car1.displayInfo(); // Output: This is a 2020 Toyota Camry.
+car2.displayInfo(); // Output: This is a 2018 Honda Accord.
+
+
+  </script>
+</body>
+</html>
