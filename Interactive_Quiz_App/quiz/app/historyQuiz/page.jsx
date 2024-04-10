@@ -7,9 +7,10 @@ import Timer from '../Timer/Timer.jsx'
 
 const page = () => {
   const [activeQuestion, setActiveQuestion] = useState(0);
-  const [selectedAnswer, setSelectedAnswer] = useState('');
+  const [selectedOption, setSelectedOption] = useState('');
   const [checked, setChecked] = useState(false);
-  const [selectedAnswerIndex, setSelectedAnswerIndex] = useState(null);
+  const [questionTracker, setQuestionTracker] = useState(true);
+  const [selectedOptionIndex, setSelectedOptionIndex] = useState(null);
   const [showResult, setShowResult] = useState(false);
   const [result, setResult] = useState({
     score: 0,
@@ -18,26 +19,31 @@ const page = () => {
   });
 
   const { questions } = historyQuiz;
-  const { question, answers, correctAnswer } = questions[activeQuestion];
+  const { question, options, correctAnswer } = questions[activeQuestion];
 
-  //   Select and check answer
-  const onAnswerSelected = (answer, idx) => {
+
+  //   Select and check the option selected if it's correct or not
+  const onOptionSelected = (option, idx) => {
     setChecked(true);
-    setSelectedAnswerIndex(idx);
-    if (answer === correctAnswer) {
-      setSelectedAnswer(true);
+    setSelectedOptionIndex(idx);
+
+    if (option === correctAnswer) {
+      setSelectedOption(true);
       console.log('true');
     } else {
-      setSelectedAnswer(false);
+      setSelectedOption(false);
       console.log('false');
     }
   };
 
-  // Calculate score and increment to next question
+
+  //   Calculate score and go to the next question
   const nextQuestion = () => {
-    setSelectedAnswerIndex(null);
+    setChecked(false);
+    setSelectedOptionIndex(null);
+
     setResult((prev) =>
-      selectedAnswer
+      selectedOption
         ? {
             ...prev,
             score: prev.score + 1,
@@ -48,43 +54,53 @@ const page = () => {
             wrongAnswers: prev.wrongAnswers + 1,
           }
     );
+
     if (activeQuestion !== questions.length - 1) {
       setActiveQuestion((prev) => prev + 1);
-    } else {
+    } 
+    else {                   // if the active question is the last question
       setActiveQuestion(0);
       setShowResult(true);
+      setQuestionTracker(false);
     }
-    setChecked(false);
   };
+
 
   return (
     <div className='container'>
       <Timer />
       <br></br>
       <h1>History Quiz Page</h1>
+      
       <div>
-        <h2>
-          Question: {activeQuestion + 1}
-          <span>/{questions.length}</span>
-        </h2>
+        {questionTracker ? (
+          <h2>
+            Question: {activeQuestion + 1}
+            <span>/{questions.length}</span>
+          </h2>
+        ) : ( 
+          <span> </span>
+        )}
       </div>
+
       <div>
         {!showResult ? (
           <div className='quiz-container'>
             <h3>{questions[activeQuestion].question}</h3>
-            {answers.map((answer, idx) => (
+            {options.map((option, idx) => (
               <div>
               <button
                 key={idx}
-                onClick={() => onAnswerSelected(answer, idx)}
+                onClick={() => onOptionSelected(option, idx)}
                 className={
-                  selectedAnswerIndex === idx ? 'li-selected' : 'li-hover'
+                  selectedOptionIndex === idx ? 'li-selected' : 'li-hover'
                 }
               >
-                <span>{answer}</span>
+                <span>{option}</span>
               </button>
               </div>
             ))}
+            
             {checked ? (
               <button onClick={nextQuestion} className='btn'>
                 {activeQuestion === question.length - 1 ? 'Finish' : 'Next'}
@@ -112,10 +128,11 @@ const page = () => {
             <p>
               Wrong Answers: <span>{result.wrongAnswers}</span>
             </p>
-            <button onClick={() => window.location.reload()}>Restart</button>
+
+            <button className='btn' onClick={() => window.location.reload()}>Restart</button>
 
             <Link href='/'>
-              <button>Back</button>
+              <button className='btn' >Select New</button>
             </Link>
 
           </div>
