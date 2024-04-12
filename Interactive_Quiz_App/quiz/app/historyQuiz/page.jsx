@@ -6,9 +6,11 @@ import styles from '../../styles/page.css';
 import Timer from '../Timer/Timer.jsx'
 
 const page = () => {
+  const timerForSingleQuestion = 20;
+
   const [timerRefresh, setTimerRefresh] = useState(false);
   const [timeTaken, setTimeTaken]=useState(0);
-  const [singleQuestionTimer, setSingleQuestionTimer]=useState(20);
+  const [singleQuestionTimer, setSingleQuestionTimer]=useState(timerForSingleQuestion);
   const [activeQuestion, setActiveQuestion] = useState(0);
   const [selectedOption, setSelectedOption] = useState('');
   const [checked, setChecked] = useState(false);
@@ -60,6 +62,7 @@ const page = () => {
 
     if (activeQuestion !== questions.length - 1) {
       setActiveQuestion((prev) => prev + 1);
+      setSingleQuestionTimer(timerForSingleQuestion);
     } 
     else {                   // if the active question is the last question
       setActiveQuestion(0);
@@ -67,7 +70,7 @@ const page = () => {
       setQuestionTracker(false);
     }
 
-    setTimerRefresh(true);     
+    setTimerRefresh(true);     // Refresh the timer for the next question
     
   };
 
@@ -78,17 +81,32 @@ const page = () => {
   }, [activeQuestion]);
 
 
+  //    Automatically go to the next question when timer for a particular question expires
   useEffect(() => {
     const timer = setInterval(() => {
       setSingleQuestionTimer((prevTime) => prevTime - 1);
+
+      if(singleQuestionTimer == 0)      //  If the timer runs out for a particular question
+      {
+        if (activeQuestion !== questions.length - 1) {
+          setActiveQuestion((prev) => prev + 1);
+        } 
+        else {                   // if the active question is the last question
+          setActiveQuestion(0);
+          setShowResult(true);
+          setQuestionTracker(false);
+        }
+        
+        setTimerRefresh(true);        // Refresh the timer for the next question
+        setSingleQuestionTimer(timerForSingleQuestion);
+      }
     }, 1000);
 
-    setSingleQuestionTimer(20);
     return () => clearInterval(timer);
+  }, [singleQuestionTimer]);
 
-  }, [singleQuestionTimer, activeQuestion]);
 
-
+  //  To calculate the total time taken for the quiz
   useEffect(() => {
     const timer = setInterval(() => {
       if (!showResult) {
@@ -158,16 +176,13 @@ const page = () => {
               Total Questions: <span>{questions.length}</span>
             </p>
             <p>
-              Total Score: <span>{result.score}</span>
-            </p>
-            <p>
               Correct Answers: <span>{result.correctAnswers}</span>
             </p>
             <p>
               Wrong Answers: <span>{result.wrongAnswers}</span>
             </p>
             <p>
-              Total Time Taken: <span>{timeTaken}</span>
+              Total Time Taken: <span>{timeTaken>60 ? 60 : timeTaken}</span> seconds
             </p>
             
 

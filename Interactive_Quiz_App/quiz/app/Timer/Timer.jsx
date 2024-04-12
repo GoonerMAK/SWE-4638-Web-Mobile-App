@@ -5,7 +5,8 @@ import Link from 'next/link';
 
 const Timer = ({ timerRefresh  }) => {
     
-  const [seconds, setSeconds]=useState(20);
+  const timerForSingleQuestion = 20;
+  const [seconds, setSeconds]=useState(timerForSingleQuestion);
 
 
   useEffect(() => {
@@ -24,8 +25,7 @@ const Timer = ({ timerRefresh  }) => {
 
   return (
     <div>
-      <h1>Timer</h1>
-      <h2>{ seconds<10 ? "0"+seconds : seconds }</h2>
+      <h1>Timer: { seconds<10 ? "0"+seconds : seconds } </h1>
     </div>
   );
 };
