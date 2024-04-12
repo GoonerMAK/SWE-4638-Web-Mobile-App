@@ -3,37 +3,29 @@ import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 
 
-const Timer = () => {
-  const [countdown, setCountdown] = useState(30);
-  const [intervalId, setIntervalId] = useState(null);
+const Timer = ({ timerRefresh  }) => {
+    
+  const [seconds, setSeconds]=useState(20);
+
 
   useEffect(() => {
-    const id = setInterval(() => {
-      setCountdown((prevCountdown) => prevCountdown - 1);
+    const timer = setInterval(() => {
+      if(seconds > 0)
+      {
+        setSeconds((prevSeconds) => prevSeconds - 1);
+      }
     }, 1000);
 
-    setIntervalId(id);
+    return () => clearInterval(timer);
 
-    return () => clearInterval(id);
-  }, []);
+  }, [timerRefresh, seconds]);
 
-  useEffect(() => {
-    if (countdown === 0) {
-      clearInterval(intervalId);
-      window.location.href = '/';
-    }
-  }, [countdown, intervalId]);
 
-  const formatTime = (time) => {
-    const minutes = Math.floor(time / 60);
-    const seconds = time % 60;
-    return `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
-  };
 
   return (
     <div>
-      <h1 align="center">Timer</h1>
-      <h2 align="center">{formatTime(countdown)}</h2>
+      <h1>Timer</h1>
+      <h2>{ seconds<10 ? "0"+seconds : seconds }</h2>
     </div>
   );
 };

@@ -1,11 +1,14 @@
 'use client';
 import Link from 'next/link';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { historyQuiz } from '../data.js';
 import styles from '../../styles/page.css';
 import Timer from '../Timer/Timer.jsx'
 
 const page = () => {
+  const [timerRefresh, setTimerRefresh] = useState(false);
+  const [timeTaken, setTimeTaken]=useState(0);
+  const [singleQuestionTimer, setSingleQuestionTimer]=useState(20);
   const [activeQuestion, setActiveQuestion] = useState(0);
   const [selectedOption, setSelectedOption] = useState('');
   const [checked, setChecked] = useState(false);
@@ -63,13 +66,43 @@ const page = () => {
       setShowResult(true);
       setQuestionTracker(false);
     }
+
+    setTimerRefresh(true);     
+    
   };
+
+
+  //    Reset the timer when going to the next question
+  useEffect(() => {
+    setTimerRefresh(false);
+  }, [activeQuestion]);
+
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setSingleQuestionTimer((prevTime) => prevTime - 1);
+    }, 1000);
+
+    setSingleQuestionTimer(20);
+    return () => clearInterval(timer);
+
+  }, [singleQuestionTimer, activeQuestion]);
+
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      if (!showResult) {
+        setTimeTaken((prevTime) => prevTime + 1);
+      }
+    }, 1000);
+  
+    return () => clearInterval(timer);
+  }, [showResult]);
 
 
   return (
     <div className='container'>
-      <Timer />
-      <br></br>
+      
       <h1>History Quiz Page</h1>
       
       <div>
@@ -82,10 +115,15 @@ const page = () => {
           <span> </span>
         )}
       </div>
+      
+      <br></br>
+      <br></br>
 
       <div>
         {!showResult ? (
           <div className='quiz-container'>
+            <Timer key={timerRefresh}/>
+            <br></br>
             <h3>{questions[activeQuestion].question}</h3>
             {options.map((option, idx) => (
               <div>
@@ -128,6 +166,10 @@ const page = () => {
             <p>
               Wrong Answers: <span>{result.wrongAnswers}</span>
             </p>
+            <p>
+              Total Time Taken: <span>{timeTaken}</span>
+            </p>
+            
 
             <button className='btn' onClick={() => window.location.reload()}>Restart</button>
 
