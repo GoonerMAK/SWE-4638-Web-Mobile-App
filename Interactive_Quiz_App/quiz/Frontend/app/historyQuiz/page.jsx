@@ -2,6 +2,7 @@
 import Link from 'next/link';
 import React, { useState, useEffect } from 'react';
 import { historyQuiz } from '../data.js';
+import { useCollapse } from 'react-collapsed'
 import styles from '../../styles/page.css';
 import Timer from '../Timer/Timer.jsx'
 
@@ -11,6 +12,7 @@ const page = () => {
   const [timerRefresh, setTimerRefresh] = useState(false);
   const [timeTaken, setTimeTaken]=useState(0);
   const [singleQuestionTimer, setSingleQuestionTimer]=useState(timerForSingleQuestion);
+
   const [activeQuestion, setActiveQuestion] = useState(0);
   const [selectedOption, setSelectedOption] = useState('');
   const [checked, setChecked] = useState(false);
@@ -25,6 +27,10 @@ const page = () => {
 
   const { questions } = historyQuiz;
   const { question, options, correctAnswer } = questions[activeQuestion];
+const [selectedOptions, setSelectedOptions] = useState([]);
+
+  const [isExpanded, setExpanded] = useState(false)
+  const { getCollapseProps, getToggleProps } = useCollapse({ isExpanded })
 
 
   //   Select and check the option selected if it's correct or not
@@ -44,6 +50,11 @@ const page = () => {
 
   //   Calculate score and go to the next question
   const nextQuestion = () => {
+
+    const updatedSelectedOptions = [...selectedOptions];
+    updatedSelectedOptions.push(selectedOptionIndex);
+    setSelectedOptions(updatedSelectedOptions);
+
     setChecked(false);
     setSelectedOptionIndex(null);
 
@@ -59,6 +70,8 @@ const page = () => {
             wrongAnswers: prev.wrongAnswers + 1,
           }
     );
+
+    console.log('Selected Options after pushing:', updatedSelectedOptions);
 
     if (activeQuestion !== questions.length - 1) {
       setActiveQuestion((prev) => prev + 1);
@@ -122,7 +135,8 @@ const page = () => {
     <div className='container'>
       
       <h1>History Quiz Page</h1>
-      
+      <h5>Caution: You can not revisit a question after pressing "Next"</h5><br></br><br></br>
+
       <div>
         {questionTracker ? (
           <h2>
@@ -141,7 +155,10 @@ const page = () => {
         {!showResult ? (
           <div className='quiz-container'>
             <Timer key={timerRefresh}/>
+            <button onClick={() => window.location.href = '/'} className='btn'>Home</button>
             <br></br>
+            <br></br>
+
             <h3>{questions[activeQuestion].question}</h3>
             {options.map((option, idx) => (
               <div>
@@ -166,7 +183,7 @@ const page = () => {
                 {' '}
                 {activeQuestion === question.length - 1 ? 'Finish' : 'Next'}
               </button>
-            )}
+            )}              
           </div>
         ) : (
           <div className='quiz-container'>
@@ -187,10 +204,35 @@ const page = () => {
             
 
             <button className='btn' onClick={() => window.location.reload()}>Restart</button>
-
+            
             <Link href='/'>
-              <button className='btn' >Select New</button>
+              <button className='btn'> Select New </button>
             </Link>
+
+            <button
+              {...getToggleProps({
+                onClick: () => setExpanded((prevExpanded) => !prevExpanded),    // Toggle 
+              })}
+            >
+              {isExpanded ? 'Hide Answers' : 'Show Answers'}
+            </button>
+            
+            <div {...getCollapseProps()}>
+              {questions.map((question, idx) => (
+                <div key={idx}>
+                  <p>Question: {question.question}</p>
+                  <p>Options:</p>
+                  <ul>
+                    {question.options.map((option, idx) => (
+                      <li type="square" key={idx}> {option} </li>
+                    ))}
+                  </ul>
+                  <p>Correct Answer: {question.correctAnswer}</p>
+                  <p>You Selected: {question.options[selectedOptions[idx]]}</p>
+                  <br></br>
+                </div>
+              ))}
+            </div>
 
           </div>
         )}
