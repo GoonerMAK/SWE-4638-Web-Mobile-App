@@ -5,6 +5,8 @@ import { geographyQuiz } from '../data.js';
 import { useCollapse } from 'react-collapsed'
 import styles from '../../styles/page.css';
 import Timer from '../Timer/Timer.jsx'
+import axios from 'axios';
+
 
 const page = () => {
   const timerForSingleQuestion = 20;
@@ -25,20 +27,34 @@ const page = () => {
     wrongAnswers: 0,
   });
 
-  const { questions } = geographyQuiz;
-  const { question, options, correctAnswer } = questions[activeQuestion];
-const [selectedOptions, setSelectedOptions] = useState([]);
+  const [geographyQuizData, setGeographyQuizData] = useState([]);
+
+  useEffect(() => {
+    const fetchQuizData = async () => {
+        try {
+            const response = await axios.get('http://localhost:5000/fetchGeographyQuizData'); 
+            setGeographyQuizData(response.data);
+        } catch (error) {
+            console.error('Error fetching quiz data:', error);
+        }
+    };
+
+      fetchQuizData();
+  }, []);
+
+
+  const [selectedOptions, setSelectedOptions] = useState([]);
 
   const [isExpanded, setExpanded] = useState(false)
   const { getCollapseProps, getToggleProps } = useCollapse({ isExpanded })
 
-
+  
   //   Select and check the option selected if it's correct or not
   const onOptionSelected = (option, idx) => {
     setChecked(true);
     setSelectedOptionIndex(idx);
 
-    if (option === correctAnswer) {
+    if (option === geographyQuizData[activeQuestion]?.correctAnswer) {
       setSelectedOption(true);
       console.log('true');
     } else {
@@ -51,7 +67,7 @@ const [selectedOptions, setSelectedOptions] = useState([]);
   //   Calculate score and go to the next question
   const nextQuestion = () => {
 
-    const updatedSelectedOptions = [...selectedOptions];
+    const updatedSelectedOptions = [...selectedOptions];          // Updating the array that keep tracks of our selected options
     updatedSelectedOptions.push(selectedOptionIndex);
     setSelectedOptions(updatedSelectedOptions);
 
@@ -73,7 +89,7 @@ const [selectedOptions, setSelectedOptions] = useState([]);
 
     console.log('Selected Options after pushing:', updatedSelectedOptions);
 
-    if (activeQuestion !== questions.length - 1) {
+    if (activeQuestion !== geographyQuizData.length - 1) {
       setActiveQuestion((prev) => prev + 1);
       setSingleQuestionTimer(timerForSingleQuestion);
     } 
@@ -101,7 +117,7 @@ const [selectedOptions, setSelectedOptions] = useState([]);
 
       if(singleQuestionTimer == 0)      //  If the timer runs out for a particular question
       {
-        if (activeQuestion !== questions.length - 1) {
+        if (activeQuestion !== geographyQuizData.length - 1) {
           setActiveQuestion((prev) => prev + 1);
         } 
         else {                   // if the active question is the last question
@@ -112,6 +128,10 @@ const [selectedOptions, setSelectedOptions] = useState([]);
         
         setTimerRefresh(true);        // Refresh the timer for the next question
         setSingleQuestionTimer(timerForSingleQuestion);
+
+        const updatedSelectedOptions = [...selectedOptions];          // Updating the array that keep tracks of our selected options
+        updatedSelectedOptions.push(-1);
+        setSelectedOptions(updatedSelectedOptions);
       }
     }, 1000);
 
@@ -141,7 +161,7 @@ const [selectedOptions, setSelectedOptions] = useState([]);
         {questionTracker ? (
           <h2>
             Question: {activeQuestion + 1}
-            <span>/{questions.length}</span>
+            <span>/{geographyQuizData.length}</span>
           </h2>
         ) : ( 
           <span> </span>
@@ -159,8 +179,8 @@ const [selectedOptions, setSelectedOptions] = useState([]);
             <br></br>
             <br></br>
 
-            <h3>{questions[activeQuestion].question}</h3>
-            {options.map((option, idx) => (
+            <h3>{geographyQuizData[activeQuestion]?.question}</h3>
+            {geographyQuizData[activeQuestion]?.options.map((option, idx) => (
               <div>
               <button
                 key={idx}
@@ -176,21 +196,21 @@ const [selectedOptions, setSelectedOptions] = useState([]);
             
             {checked ? (
               <button onClick={nextQuestion} className='btn'>
-                {activeQuestion === question.length - 1 ? 'Finish' : 'Next'}
+                {activeQuestion === geographyQuizData.length - 1 ? 'Finish' : 'Next'}
               </button>
             ) : (
               <button onClick={nextQuestion} disabled className='btn-disabled'>
                 {' '}
-                {activeQuestion === question.length - 1 ? 'Finish' : 'Next'}
+                {activeQuestion === (geographyQuizData.length) - 1 ? 'Finish' : 'Next'}
               </button>
-            )}
+            )}              
           </div>
         ) : (
           <div className='quiz-container'>
             <h3>Results</h3>
-            <h3>Overall { ((result.score / questions.length) * 100).toFixed(2) }%</h3>
+            <h3>Overall { ((result.score / geographyQuizData.length) * 100).toFixed(2) }%</h3>
             <p>
-              Total Questions: <span>{questions.length}</span>
+              Total Questions: <span>{geographyQuizData.length}</span>
             </p>
             <p>
               Correct Answers: <span>{result.correctAnswers}</span>
@@ -218,7 +238,7 @@ const [selectedOptions, setSelectedOptions] = useState([]);
             </button>
             
             <div {...getCollapseProps()}>
-              {questions.map((question, idx) => (
+              {geographyQuizData.map((question, idx) => (
                 <div key={idx}>
                   <p>Question: {question.question}</p>
                   <p>Options:</p>
@@ -228,7 +248,7 @@ const [selectedOptions, setSelectedOptions] = useState([]);
                     ))}
                   </ul>
                   <p>Correct Answer: {question.correctAnswer}</p>
-                  <p>You Selected: {question.options[selectedOptions[idx]]}</p>
+                  <p>You Selected: {selectedOptions[idx] === -1 ? "(You Didn't Select Anything)" : question.options[selectedOptions[idx]]}</p>
                   <br></br>
                 </div>
               ))}

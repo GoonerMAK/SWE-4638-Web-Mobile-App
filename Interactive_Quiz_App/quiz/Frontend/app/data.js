@@ -1,5 +1,5 @@
 export const historyQuiz = {
-    totalQuestions: 5,
+    totalQuestions: 3,
     questions: [
       {
         id: 1,
@@ -24,7 +24,7 @@ export const historyQuiz = {
   
 
   export const generalKnowledgeQuiz = {
-    totalQuestions: 5,
+    totalQuestions: 3,
     questions: [
       {
         id: 1,
@@ -34,7 +34,7 @@ export const historyQuiz = {
       },
       {
         id: 2,
-        question: 'The world’s nation 5G mobile network was launched by which country?',
+        question: 'The world\'s nation 5G mobile network was launched by which country?',
         options: ['Malaysia', 'USA', 'South Korea'],
         correctAnswer: 'South Korea',
       },
@@ -50,7 +50,7 @@ export const historyQuiz = {
 
 
   export const geographyQuiz = {
-    totalQuestions: 5,
+    totalQuestions: 3,
     questions: [
       {
         id: 1,
@@ -76,7 +76,7 @@ export const historyQuiz = {
 
 
   export const sportsQuiz = {
-    totalQuestions: 5,
+    totalQuestions: 3,
     questions: [
       {
         id: 1,
